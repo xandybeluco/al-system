@@ -1,7 +1,7 @@
-### Setting Up Your VHOST
+# Setting Up Your VHOST
 
 The following is a sample VHOST you might want to consider for your project.
-
+```xml
 <VirtualHost *:80>
    DocumentRoot "/path/to/project/al-system/public"
    ServerName al-system.com
@@ -22,3 +22,5 @@ The following is a sample VHOST you might want to consider for your project.
        Allow from all
    </Directory>
 </VirtualHost>
+```
+
