@@ -175,7 +175,7 @@ DROP TABLE IF EXISTS `al_system`.`forma_pagamento` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`forma_pagamento` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `descricao` ENUM('DINHEIRO', 'CARTAO_CREDITO', 'CARTAO_DEBITO', 'CHEQUE', 'PERMUTA', 'PROMISSORIA') CHARACTER SET 'utf8' NOT NULL,
+  `descricao` ENUM('CARTAO_CREDITO', 'CARTAO_DEBITO', 'CHEQUE', 'DINHEIRO', 'PERMUTA', 'PROMISSORIA') CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
@@ -365,6 +365,13 @@ CREATE TABLE IF NOT EXISTS `al_system`.`conta_pagar` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+SET SQL_MODE = '';
+GRANT USAGE ON *.* TO al-system;
+ DROP USER al-system;
+SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+CREATE USER 'al-system' IDENTIFIED BY 'al-system';
+
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `al_system`.* TO 'al-system';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -403,6 +410,21 @@ INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (50, 'Mato Grosso 
 INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (51, 'Mato Grosso', 'MT');
 INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (52, 'Goiás', 'GO');
 INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (53, 'Distrito Federal', 'DF');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `al_system`.`forma_pagamento`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `al_system`;
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTAO_CREDITO');
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTAO_DEBITO');
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CHEQUE');
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'DINHEIRO');
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PERMUTA');
+INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PROMISSORIA');
 
 COMMIT;
 
