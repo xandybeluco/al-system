@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`endereco` (
   `tipo` ENUM('EMPRESARIAL', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
   `uf` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `endereco_cidade_INDEX` (`cidade` ASC),
+  INDEX `cidade_INDEX` (`cidade` ASC),
   INDEX `fk_endereco_pessoa_INDEX` (`pessoa` ASC),
   INDEX `fk_endereco_uf_INDEX` (`uf` ASC),
   CONSTRAINT `fk_endereco_pessoa`
@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`telefone` (
   `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
   `tipo` ENUM('EMPRESARIAL', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
   PRIMARY KEY (`id`),
+  INDEX `numero_INDEX` (`numero` ASC),
   INDEX `fk_telefone_pessoa_INDEX` (`pessoa` ASC),
   CONSTRAINT `fk_telefone_pessoa`
     FOREIGN KEY (`pessoa`)
@@ -121,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`email` (
   `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
   `tipo` ENUM('EMPRESARIAL', 'NF_E', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
   PRIMARY KEY (`id`),
+  INDEX `endereco_eletronico_INDEX` (`endereco_eletronico` ASC),
   INDEX `fk_email_pessoa_INDEX` (`pessoa` ASC),
   CONSTRAINT `fk_email_pessoa`
     FOREIGN KEY (`pessoa`)
@@ -228,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`ordem_servico` (
     REFERENCES `al_system`.`condicao_pagamento` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordem_servico_usuario`
+  CONSTRAINT `fk_ordem_servico_usuario_abertura`
     FOREIGN KEY (`usuario_abertura`)
     REFERENCES `al_system`.`credencial` (`usuario`)
     ON DELETE NO ACTION
@@ -256,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`grupo_ordem` (
   INDEX `grupo_servico_ordem_servico_INDEX` (`grupo_servico` ASC, `ordem_servico` ASC),
   INDEX `fk_grupo_ordem_grupo_servico_INDEX` (`grupo_servico` ASC),
   INDEX `fk_grupo_ordem_ordem_servico_INDEX` (`ordem_servico` ASC),
-  INDEX `fk_grupo_ordem_usuario_INDEX` (`usuario_alteracao` ASC),
+  INDEX `fk_grupo_ordem_usuario_alteracao_INDEX` (`usuario_alteracao` ASC),
   CONSTRAINT `fk_grupo_ordem_grupo_servico`
     FOREIGN KEY (`grupo_servico`)
     REFERENCES `al_system`.`grupo_servico` (`id`)
@@ -267,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`grupo_ordem` (
     REFERENCES `al_system`.`ordem_servico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_grupo_ordem_usuario`
+  CONSTRAINT `fk_grupo_ordem_usuario_alteracao`
     FOREIGN KEY (`usuario_alteracao`)
     REFERENCES `al_system`.`credencial` (`usuario`)
     ON DELETE NO ACTION
@@ -285,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`conta_receber` (
   `data_alteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `data_vencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `montante_pago` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
+  `montante_pago` DECIMAL(8,2) NOT NULL DEFAULT 0,
   `numero_parcela` INT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
   `ordem_servico` BIGINT UNSIGNED NOT NULL,
@@ -364,12 +366,12 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SET SQL_MODE = '';
-GRANT USAGE ON *.* TO al_system;
- DROP USER al_system;
+GRANT USAGE ON *.* TO alsystem;
+ DROP USER alsystem;
 SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-CREATE USER 'al_system' IDENTIFIED BY 'al_system';
+CREATE USER 'alsystem' IDENTIFIED BY 'alsystem';
 
-GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `al_system`.* TO 'al_system';
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `al_system`.* TO 'alsystem';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
