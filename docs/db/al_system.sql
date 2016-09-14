@@ -37,11 +37,11 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`pessoa` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`pessoa` (
+  `abertura_nascimento` TIMESTAMP NULL,
   `cnpj_cpf` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
+  `fantasia_sobrenome` VARCHAR(64) CHARACTER SET 'utf8' NULL,
   `ie_rg` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
   `nome_razao` VARCHAR(128) CHARACTER SET 'utf8' NOT NULL,
-  `fantasia_sobrenome` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `abertura_nascimento` TIMESTAMP NULL,
   `tipo` ENUM('FISICA', 'JURIDICA') CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`cnpj_cpf`),
   UNIQUE INDEX `ie_rg_UNIQUE` (`ie_rg` ASC),
@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `al_system`.`endereco` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`endereco` (
   `bairro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
-  `cep` INT(8) NOT NULL,
+  `cep` INT(8) UNSIGNED NOT NULL,
   `cidade` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `complemento` VARCHAR(64) CHARACTER SET 'utf8' NULL,
   `complemento_2` VARCHAR(64) CHARACTER SET 'utf8' NULL,
@@ -93,8 +93,8 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`telefone` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`telefone` (
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `contato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `numero` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
   `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
   `tipo` ENUM('EMPRESARIAL', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
@@ -160,8 +160,8 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`grupo_servico` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`grupo_servico` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
@@ -174,8 +174,8 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`forma_pagamento` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`forma_pagamento` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `descricao` ENUM('CARTAO_CREDITO', 'CARTAO_DEBITO', 'CHEQUE', 'DINHEIRO', 'PERMUTA', 'PROMISSORIA') CHARACTER SET 'utf8' NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
@@ -188,9 +188,9 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`condicao_pagamento` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`condicao_pagamento` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
   `forma_pagamento` INT UNSIGNED NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `forma_pagamento_descricao_UNIQUE` (`forma_pagamento` ASC, `descricao` ASC),
   INDEX `fk_condicao_pagamento_forma_pagamento_INDEX` (`forma_pagamento` ASC),
@@ -252,8 +252,8 @@ CREATE TABLE IF NOT EXISTS `al_system`.`grupo_ordem` (
   `ordem_servico` BIGINT UNSIGNED NOT NULL,
   `situacao` ENUM('ABERTO', 'CANCELADO', 'FINALIZADO') CHARACTER SET 'utf8' NOT NULL,
   `usuario_alteracao` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `valor_servico` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
   `valor_orcamento` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
+  `valor_servico` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `grupo_servico_ordem_servico_INDEX` (`grupo_servico` ASC, `ordem_servico` ASC),
   INDEX `fk_grupo_ordem_grupo_servico_INDEX` (`grupo_servico` ASC),
@@ -287,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `al_system`.`conta_receber` (
   `data_alteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `data_vencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `montante_pago` DECIMAL(8,2) NOT NULL DEFAULT 0,
+  `montante_pago` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
   `numero_parcela` INT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
   `ordem_servico` BIGINT UNSIGNED NOT NULL,
@@ -335,8 +335,8 @@ CREATE TABLE IF NOT EXISTS `al_system`.`conta_pagar` (
   `montante_pago` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
   `numero_parcela` INT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
-  `periodo_referente_inicio` TIMESTAMP NULL,
   `periodo_referente_fim` TIMESTAMP NULL,
+  `periodo_referente_inicio` TIMESTAMP NULL,
   `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
   `saldo_devedor` DECIMAL(8,2) UNSIGNED NOT NULL,
   `situacao` ENUM('ABERTO', 'AMORTIZADO', 'BAIXADO') CHARACTER SET 'utf8' NOT NULL,
@@ -419,12 +419,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `al_system`;
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTAO_CREDITO');
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTAO_DEBITO');
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CHEQUE');
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'DINHEIRO');
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PERMUTA');
-INSERT INTO `al_system`.`forma_pagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PROMISSORIA');
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CARTAO_CREDITO', DEFAULT);
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CARTAO_DEBITO', DEFAULT);
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CHEQUE', DEFAULT);
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('DINHEIRO', DEFAULT);
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('PERMUTA', DEFAULT);
+INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('PROMISSORIA', DEFAULT);
 
 COMMIT;
 
