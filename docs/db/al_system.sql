@@ -16,71 +16,79 @@ CREATE SCHEMA IF NOT EXISTS `al_system` DEFAULT CHARACTER SET utf8 ;
 USE `al_system` ;
 
 -- -----------------------------------------------------
--- Table `al_system`.`uf`
+-- Table `al_system`.`Uf`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`uf` ;
+DROP TABLE IF EXISTS `al_system`.`Uf` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`uf` (
-  `ibge` INT(2) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `al_system`.`Uf` (
+  `ibge` TINYINT(2) UNSIGNED NOT NULL,
   `nome` VARCHAR(19) CHARACTER SET 'utf8' NOT NULL,
   `sigla` ENUM('AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'EX', 'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO') CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`ibge`),
-  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC),
-  UNIQUE INDEX `sigla_UNIQUE` (`sigla` ASC))
+  UNIQUE INDEX `nomeUNIQUE` (`nome` ASC),
+  UNIQUE INDEX `siglaUNIQUE` (`sigla` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`pessoa`
+-- Table `al_system`.`Pessoa`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`pessoa` ;
+DROP TABLE IF EXISTS `al_system`.`Pessoa` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`pessoa` (
-  `abertura_nascimento` TIMESTAMP NULL,
-  `cnpj_cpf` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `fantasia_sobrenome` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `ie_rg` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `nome_razao` VARCHAR(128) CHARACTER SET 'utf8' NOT NULL,
-  `tipo` ENUM('FISICA', 'JURIDICA') CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`cnpj_cpf`),
-  UNIQUE INDEX `ie_rg_UNIQUE` (`ie_rg` ASC),
-  INDEX `nome_razao_INDEX` (`nome_razao` ASC))
+CREATE TABLE IF NOT EXISTS `al_system`.`Pessoa` (
+  `aberturaNascimento` TIMESTAMP NULL,
+  `cnpjCpf` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
+  `fantasiaSobrenome` VARCHAR(64) CHARACTER SET 'utf8' NULL,
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ieRg` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
+  `nomeRazao` VARCHAR(128) CHARACTER SET 'utf8' NOT NULL,
+  `perfilCliente` BIT(1) NOT NULL DEFAULT b'0',
+  `perfilFornecedor` BIT(1) NOT NULL DEFAULT b'0',
+  `perfilTransportador` BIT(1) NOT NULL DEFAULT b'0',
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `cnpjCpfUNIQUE` (`cnpjCpf` ASC),
+  UNIQUE INDEX `ieRgUNIQUE` (`ieRg` ASC),
+  INDEX `cnpjCpfINDEX` (`cnpjCpf` ASC),
+  INDEX `nomeRazaoINDEX` (`nomeRazao` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`endereco`
+-- Table `al_system`.`Endereco`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`endereco` ;
+DROP TABLE IF EXISTS `al_system`.`Endereco` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`endereco` (
+CREATE TABLE IF NOT EXISTS `al_system`.`Endereco` (
   `bairro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
-  `cep` INT(8) UNSIGNED NOT NULL,
+  `cep` CHAR(8) CHARACTER SET 'utf8' NOT NULL,
   `cidade` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `complemento` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `complemento_2` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `contato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
-  `ibge` INT(8) UNSIGNED NOT NULL,
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `complemento2` VARCHAR(64) CHARACTER SET 'utf8' NULL,
+  `ibge` MEDIUMINT(8) UNSIGNED NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `logradouro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
+  `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   `numero` VARCHAR(8) CHARACTER SET 'utf8' NOT NULL DEFAULT 's.n.º',
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `tipo` ENUM('EMPRESARIAL', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
-  `uf` INT UNSIGNED NOT NULL,
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL,
+  `uf` TINYINT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `cidade_INDEX` (`cidade` ASC),
-  INDEX `fk_endereco_pessoa_INDEX` (`pessoa` ASC),
-  INDEX `fk_endereco_uf_INDEX` (`uf` ASC),
-  CONSTRAINT `fk_endereco_pessoa`
+  INDEX `cidadeINDEX` (`cidade` ASC),
+  INDEX `logradouroINDEX` (`logradouro` ASC),
+  INDEX `enderecoPessoaFKINDEX` (`pessoa` ASC),
+  INDEX `enderecoUfFKINDEX` (`uf` ASC),
+  CONSTRAINT `enderecoPessoaFK`
     FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_endereco_uf`
+  CONSTRAINT `enderecoUfFK`
     FOREIGN KEY (`uf`)
-    REFERENCES `al_system`.`uf` (`ibge`)
+    REFERENCES `al_system`.`Uf` (`ibge`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -88,22 +96,22 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`telefone`
+-- Table `al_system`.`Telefone`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`telefone` ;
+DROP TABLE IF EXISTS `al_system`.`Telefone` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`telefone` (
-  `contato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
+CREATE TABLE IF NOT EXISTS `al_system`.`Telefone` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   `numero` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `tipo` ENUM('EMPRESARIAL', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `numero_INDEX` (`numero` ASC),
-  INDEX `fk_telefone_pessoa_INDEX` (`pessoa` ASC),
-  CONSTRAINT `fk_telefone_pessoa`
+  UNIQUE INDEX `pessoaNumeroUNIQUE` (`pessoa` ASC, `numero` ASC),
+  INDEX `telefonePessoaFKINDEX` (`pessoa` ASC),
+  CONSTRAINT `telefonePessoaFK`
     FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -111,22 +119,22 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`email`
+-- Table `al_system`.`Email`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`email` ;
+DROP TABLE IF EXISTS `al_system`.`Email` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`email` (
-  `contato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
-  `endereco_eletronico` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `tipo` ENUM('EMPRESARIAL', 'NF_E', 'PADRAO', 'PESSOAL') CHARACTER SET 'utf8' NOT NULL DEFAULT 'PADRAO',
+CREATE TABLE IF NOT EXISTS `al_system`.`Email` (
+  `enderecoEletronico` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
+  `id` INT UNSIGNED NOT NULL,
+  `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `endereco_eletronico_INDEX` (`endereco_eletronico` ASC),
-  INDEX `fk_email_pessoa_INDEX` (`pessoa` ASC),
-  CONSTRAINT `fk_email_pessoa`
+  UNIQUE INDEX `pessoaEnderecoEletronicoUNIQUE` (`pessoa` ASC, `enderecoEletronico` ASC),
+  INDEX `emailPessoaFKINDEX` (`pessoa` ASC),
+  CONSTRAINT `emailPessoaFK`
     FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -134,20 +142,26 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`credencial`
+-- Table `al_system`.`Credencial`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`credencial` ;
+DROP TABLE IF EXISTS `al_system`.`Credencial` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`credencial` (
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NULL,
-  `senha` VARCHAR(128) CHARACTER SET 'utf8' NOT NULL DEFAULT '93f4a4e86cf842f2a03cd2eedbcd3c72325d6833fa991b895be40204be651427652c78b9cdbdef7c01f80a0acb58f791c36d49fbaa5738970e83772cea18eba1',
-  `situacao` ENUM('ATIVO', 'INATIVO') CHARACTER SET 'utf8' NOT NULL,
+CREATE TABLE IF NOT EXISTS `al_system`.`Credencial` (
+  `funcionario` SMALLINT UNSIGNED NOT NULL,
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `perfilAdministrador` BIT(1) NOT NULL DEFAULT b'0',
+  `perfilPadrao` BIT(1) NOT NULL DEFAULT b'1',
+  `senha` CHAR(128) CHARACTER SET 'utf8' NOT NULL DEFAULT '93f4a4e86cf842f2a03cd2eedbcd3c72325d6833fa991b895be40204be651427652c78b9cdbdef7c01f80a0acb58f791c36d49fbaa5738970e83772cea18eba1',
+  `situacao` TINYINT UNSIGNED NOT NULL,
   `usuario` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  PRIMARY KEY (`usuario`),
-  INDEX `fk_credencial_pessoa_INDEX` (`pessoa` ASC),
-  CONSTRAINT `fk_credencial_pessoa`
-    FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `funcionarioUNIQUE` (`funcionario` ASC),
+  UNIQUE INDEX `usuarioUNIQUE` (`usuario` ASC),
+  INDEX `usuarioINDEX` (`usuario` ASC),
+  INDEX `credencialPessoaFKINDEX` (`funcionario` ASC),
+  CONSTRAINT `credencialPessoaFK`
+    FOREIGN KEY (`funcionario`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -155,48 +169,48 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`grupo_servico`
+-- Table `al_system`.`Servico`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`grupo_servico` ;
+DROP TABLE IF EXISTS `al_system`.`Servico` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`grupo_servico` (
+CREATE TABLE IF NOT EXISTS `al_system`.`Servico` (
   `descricao` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
+  UNIQUE INDEX `descricaoUNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`forma_pagamento`
+-- Table `al_system`.`FormaPagamento`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`forma_pagamento` ;
+DROP TABLE IF EXISTS `al_system`.`FormaPagamento` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`forma_pagamento` (
-  `descricao` ENUM('CARTAO_CREDITO', 'CARTAO_DEBITO', 'CHEQUE', 'DINHEIRO', 'PERMUTA', 'PROMISSORIA') CHARACTER SET 'utf8' NOT NULL,
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `descricao_UNIQUE` (`descricao` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `al_system`.`condicao_pagamento`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`condicao_pagamento` ;
-
-CREATE TABLE IF NOT EXISTS `al_system`.`condicao_pagamento` (
+CREATE TABLE IF NOT EXISTS `al_system`.`FormaPagamento` (
   `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
-  `forma_pagamento` INT UNSIGNED NOT NULL,
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `forma_pagamento_descricao_UNIQUE` (`forma_pagamento` ASC, `descricao` ASC),
-  INDEX `fk_condicao_pagamento_forma_pagamento_INDEX` (`forma_pagamento` ASC),
-  CONSTRAINT `fk_condicao_pagamento_forma_pagamento`
-    FOREIGN KEY (`forma_pagamento`)
-    REFERENCES `al_system`.`forma_pagamento` (`id`)
+  UNIQUE INDEX `descricaoUNIQUE` (`descricao` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `al_system`.`CondicaoPagamento`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `al_system`.`CondicaoPagamento` ;
+
+CREATE TABLE IF NOT EXISTS `al_system`.`CondicaoPagamento` (
+  `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
+  `formaPagamento` TINYINT UNSIGNED NOT NULL,
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `formaPagamentoDescricaoUNIQUE` (`formaPagamento` ASC, `descricao` ASC),
+  INDEX `condicaoPagamentoFormaPagamentoFKINDEX` (`formaPagamento` ASC),
+  CONSTRAINT `condicaoPagamentoFormaPagamentoFK`
+    FOREIGN KEY (`formaPagamento`)
+    REFERENCES `al_system`.`FormaPagamento` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -204,35 +218,36 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`ordem_servico`
+-- Table `al_system`.`Ordem`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`ordem_servico` ;
+DROP TABLE IF EXISTS `al_system`.`Ordem` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`ordem_servico` (
-  `condicao_pagamento` INT UNSIGNED NOT NULL,
-  `data_abertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS `al_system`.`Ordem` (
+  `cliente` SMALLINT UNSIGNED NOT NULL,
+  `condicaoPagamento` SMALLINT UNSIGNED NOT NULL,
+  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `observacao` VARCHAR(256) CHARACTER SET 'utf8' NULL,
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `tipo` ENUM('ORCAMENTO', 'SERVICO') CHARACTER SET 'utf8' NOT NULL,
-  `usuario_abertura` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL,
+  `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_ordem_servico_pessoa_INDEX` (`pessoa` ASC),
-  INDEX `fk_ordem_servico_condicao_pagamento_INDEX` (`condicao_pagamento` ASC),
-  INDEX `fk_ordem_servico_usuario_INDEX` (`usuario_abertura` ASC),
-  CONSTRAINT `fk_ordem_servico_pessoa`
-    FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+  INDEX `ordemClienteFKINDEX` (`cliente` ASC),
+  INDEX `ordemCondicaoPagamentoFKINDEX` (`condicaoPagamento` ASC),
+  INDEX `ordemUsuarioAberturaFKINDEX` (`usuarioAbertura` ASC),
+  CONSTRAINT `ordemClienteFK`
+    FOREIGN KEY (`cliente`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordem_servico_condicao_pagamento`
-    FOREIGN KEY (`condicao_pagamento`)
-    REFERENCES `al_system`.`condicao_pagamento` (`id`)
+  CONSTRAINT `ordemCondicaoPagamentoFK`
+    FOREIGN KEY (`condicaoPagamento`)
+    REFERENCES `al_system`.`CondicaoPagamento` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordem_servico_usuario_abertura`
-    FOREIGN KEY (`usuario_abertura`)
-    REFERENCES `al_system`.`credencial` (`usuario`)
+  CONSTRAINT `ordemUsuarioAberturaFK`
+    FOREIGN KEY (`usuarioAbertura`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -240,38 +255,38 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`grupo_ordem`
+-- Table `al_system`.`ItemOrdemServico`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`grupo_ordem` ;
+DROP TABLE IF EXISTS `al_system`.`ItemOrdemServico` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`grupo_ordem` (
-  `data_alteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `data_finalizacao_prevista` TIMESTAMP NULL,
-  `grupo_servico` INT UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `al_system`.`ItemOrdemServico` (
+  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dataFinalizacaoPrevista` TIMESTAMP NULL,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ordem_servico` BIGINT UNSIGNED NOT NULL,
-  `situacao` ENUM('ABERTO', 'CANCELADO', 'FINALIZADO') CHARACTER SET 'utf8' NOT NULL,
-  `usuario_alteracao` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `valor_orcamento` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
-  `valor_servico` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
+  `ordem` BIGINT UNSIGNED NOT NULL,
+  `servico` INT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `valorOrcamento` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
+  `valorServico` DECIMAL(9,2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `grupo_servico_ordem_servico_INDEX` (`grupo_servico` ASC, `ordem_servico` ASC),
-  INDEX `fk_grupo_ordem_grupo_servico_INDEX` (`grupo_servico` ASC),
-  INDEX `fk_grupo_ordem_ordem_servico_INDEX` (`ordem_servico` ASC),
-  INDEX `fk_grupo_ordem_usuario_alteracao_INDEX` (`usuario_alteracao` ASC),
-  CONSTRAINT `fk_grupo_ordem_grupo_servico`
-    FOREIGN KEY (`grupo_servico`)
-    REFERENCES `al_system`.`grupo_servico` (`id`)
+  INDEX `itemOrdemServicoOrdemINDEX` (`ordem` ASC),
+  INDEX `ItemOrdemServicoOrdemFKINDEX` (`ordem` ASC),
+  INDEX `ItemOrdemServicoServicoFKINDEX` (`servico` ASC),
+  INDEX `ItemOrdemServicoUsuarioAlteracaoFKINDEX` (`usuarioAlteracao` ASC),
+  CONSTRAINT `ItemOrdemServicoOrdemFK`
+    FOREIGN KEY (`ordem`)
+    REFERENCES `al_system`.`Ordem` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_grupo_ordem_ordem_servico`
-    FOREIGN KEY (`ordem_servico`)
-    REFERENCES `al_system`.`ordem_servico` (`id`)
+  CONSTRAINT `ItemOrdemServicoServicoFK`
+    FOREIGN KEY (`servico`)
+    REFERENCES `al_system`.`Servico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_grupo_ordem_usuario_alteracao`
-    FOREIGN KEY (`usuario_alteracao`)
-    REFERENCES `al_system`.`credencial` (`usuario`)
+  CONSTRAINT `ItemOrdemServicoUsuarioAlteracaoFK`
+    FOREIGN KEY (`usuarioAlteracao`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -279,40 +294,42 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`conta_receber`
+-- Table `al_system`.`ContaReceber`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`conta_receber` ;
+DROP TABLE IF EXISTS `al_system`.`ContaReceber` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`conta_receber` (
-  `data_alteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `data_vencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS `al_system`.`ContaReceber` (
+  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dataVencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `montante_pago` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
-  `numero_parcela` INT UNSIGNED NOT NULL DEFAULT 0,
+  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
+  `numeroParcela` TINYINT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
-  `ordem_servico` BIGINT UNSIGNED NOT NULL,
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `saldo_devedor` DECIMAL(8,2) UNSIGNED NOT NULL,
-  `situacao` ENUM('ABERTO', 'AMORTIZADO', 'BAIXADO') CHARACTER SET 'utf8' NOT NULL,
-  `usuario_alteracao` VARCHAR(16) CHARACTER SET 'utf8' NULL,
+  `ordem` BIGINT UNSIGNED NOT NULL,
+  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
+  `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `valor` DECIMAL(9,2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_conta_receber_ordem_servico_INDEX` (`ordem_servico` ASC),
-  INDEX `fk_conta_receber_pessoa_INDEX` (`pessoa` ASC),
-  INDEX `fk_conta_receber_usuario_INDEX` (`usuario_alteracao` ASC),
-  UNIQUE INDEX `ordem_servico_numero_parcela_UNIQUE` (`ordem_servico` ASC, `numero_parcela` ASC),
-  CONSTRAINT `fk_conta_receber_ordem_servico`
-    FOREIGN KEY (`ordem_servico`)
-    REFERENCES `al_system`.`ordem_servico` (`id`)
+  UNIQUE INDEX `ordemNumeroParcelaUNIQUE` (`ordem` ASC, `numeroParcela` ASC),
+  INDEX `contaReceberOrdemFKINDEX` (`ordem` ASC),
+  INDEX `contaReceberUsuarioAberturaFKINDEX` (`usuarioAbertura` ASC),
+  INDEX `contaReceberUsuarioAlteracaoFKINDEX` (`usuarioAlteracao` ASC),
+  CONSTRAINT `contaReceberOrdemFK`
+    FOREIGN KEY (`ordem`)
+    REFERENCES `al_system`.`Ordem` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_conta_receber_pessoa`
-    FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+  CONSTRAINT `contaReceberUsuarioAberturaFK`
+    FOREIGN KEY (`usuarioAbertura`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_conta_receber_usuario`
-    FOREIGN KEY (`usuario_alteracao`)
-    REFERENCES `al_system`.`credencial` (`usuario`)
+  CONSTRAINT `contaReceberUsuarioAlteracaoFK`
+    FOREIGN KEY (`usuarioAlteracao`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -320,46 +337,45 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `al_system`.`conta_pagar`
+-- Table `al_system`.`ContaPagar`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `al_system`.`conta_pagar` ;
+DROP TABLE IF EXISTS `al_system`.`ContaPagar` ;
 
-CREATE TABLE IF NOT EXISTS `al_system`.`conta_pagar` (
-  `data_abertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `data_alteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `data_emissao` TIMESTAMP NULL,
-  `data_vencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS `al_system`.`ContaPagar` (
+  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dataEmissao` TIMESTAMP NULL,
+  `dataVencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fatura` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
+  `fornecedor` SMALLINT UNSIGNED NOT NULL,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mes_referente` VARCHAR(7) CHARACTER SET 'utf8' NOT NULL,
-  `montante_pago` DECIMAL(8,2) UNSIGNED NOT NULL DEFAULT 0,
-  `numero_parcela` INT UNSIGNED NOT NULL DEFAULT 0,
+  `mesReferente` TINYINT UNSIGNED NOT NULL,
+  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
+  `numeroParcela` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
-  `periodo_referente_fim` TIMESTAMP NULL,
-  `periodo_referente_inicio` TIMESTAMP NULL,
-  `pessoa` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
-  `saldo_devedor` DECIMAL(8,2) UNSIGNED NOT NULL,
-  `situacao` ENUM('ABERTO', 'AMORTIZADO', 'BAIXADO') CHARACTER SET 'utf8' NOT NULL,
-  `usuario_abertura` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `usuario_alteracao` VARCHAR(16) CHARACTER SET 'utf8' NULL,
+  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
+  `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `valor` DECIMAL(9,2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_conta_pagar_pessoa_INDEX` (`pessoa` ASC),
-  INDEX `fk_conta_pagar_usuario_abertura_INDEX` (`usuario_abertura` ASC),
-  INDEX `fk_conta_pagar_usuario_alteracao_INDEX` (`usuario_alteracao` ASC),
-  UNIQUE INDEX `fatura_numero_parcela_pessoa_UNIQUE` (`fatura` ASC, `numero_parcela` ASC, `pessoa` ASC),
-  CONSTRAINT `fk_conta_pagar_pessoa`
-    FOREIGN KEY (`pessoa`)
-    REFERENCES `al_system`.`pessoa` (`cnpj_cpf`)
+  UNIQUE INDEX `faturaFornecedorNumeroParcelaUNIQUE` (`fatura` ASC, `fornecedor` ASC, `numeroParcela` ASC),
+  INDEX `contaPagarFornecedorFKINDEX` (`fornecedor` ASC),
+  INDEX `contaPagarUsuarioAberturaFKINDEX` (`usuarioAbertura` ASC),
+  INDEX `contaPagarUsuarioAlteracaoFKINDEX` (`usuarioAlteracao` ASC),
+  CONSTRAINT `contaPagarFornecedorFK`
+    FOREIGN KEY (`fornecedor`)
+    REFERENCES `al_system`.`Pessoa` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_conta_pagar_usuario_abertura`
-    FOREIGN KEY (`usuario_abertura`)
-    REFERENCES `al_system`.`credencial` (`usuario`)
+  CONSTRAINT `contaPagarUsuarioAberturaFK`
+    FOREIGN KEY (`usuarioAbertura`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_conta_pagar_usuario_alteracao`
-    FOREIGN KEY (`usuario_alteracao`)
-    REFERENCES `al_system`.`credencial` (`usuario`)
+  CONSTRAINT `contaPagarUsuarioAlteracaoFK`
+    FOREIGN KEY (`usuarioAlteracao`)
+    REFERENCES `al_system`.`Credencial` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -378,53 +394,53 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
--- Data for table `al_system`.`uf`
+-- Data for table `al_system`.`Uf`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `al_system`;
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (00, 'Exterior', 'EX');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (11, 'Rondônia', 'RO');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (12, 'Acre', 'AC');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (13, 'Amazonas', 'AM');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (14, 'Roraima', 'RR');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (15, 'Pará', 'PA');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (16, 'Amapá', 'AP');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (17, 'Tocantins', 'TO');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (21, 'Maranhão', 'MA');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (22, 'Piauí', 'PI');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (23, 'Ceará', 'CE');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (24, 'Rio Grande do Norte', 'RN');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (25, 'Paraíba', 'PB');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (26, 'Pernambuco', 'PE');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (27, 'Alagoas', 'AL');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (28, 'Sergipe', 'SE');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (29, 'Bahia', 'BA');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (31, 'Minas Gerais', 'MG');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (32, 'Espírito Santo', 'ES');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (33, 'Rio de Janeiro', 'RJ');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (35, 'São Paulo', 'SP');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (41, 'Paraná', 'PR');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (42, 'Santa Catarina', 'SC');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (43, 'Rio Grande do Sul', 'RS');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (50, 'Mato Grosso do Sul', 'MS');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (51, 'Mato Grosso', 'MT');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (52, 'Goiás', 'GO');
-INSERT INTO `al_system`.`uf` (`ibge`, `nome`, `sigla`) VALUES (53, 'Distrito Federal', 'DF');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (00, 'EXTERIOR', 'EX');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (11, 'RONDÔNIA', 'RO');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (12, 'ACRE', 'AC');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (13, 'AMAZONAS', 'AM');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (14, 'RORAIMA', 'RR');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (15, 'PARÁ', 'PA');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (16, 'AMAPÁ', 'AP');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (17, 'TOCANTINS', 'TO');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (21, 'MARANHÃO', 'MA');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (22, 'PIAUÍ', 'PI');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (23, 'CEARÁ', 'CE');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (24, 'RIO GRANDE DO NORTE', 'RN');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (25, 'PARAÍBA', 'PB');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (26, 'PERNAMBUCO', 'PE');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (27, 'ALAGOAS', 'AL');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (28, 'SERGIPE', 'SE');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (29, 'BAHIA', 'BA');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (31, 'MINAS GERAIS', 'MG');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (32, 'ESPÍRITO SANTO', 'ES');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (33, 'RIO DE JANEIRO', 'RJ');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (35, 'SÃO PAULO', 'SP');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (41, 'PARANÁ', 'PR');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (42, 'SANTA CATARINA', 'SC');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (43, 'RIO GRANDE DO SUL', 'RS');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (50, 'MATO GROSSO DO SUL', 'MS');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (51, 'MATO GROSSO', 'MT');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (52, 'GOIÁS', 'GO');
+INSERT INTO `al_system`.`Uf` (`ibge`, `nome`, `sigla`) VALUES (53, 'DISTRITO FEDERAL', 'DF');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `al_system`.`forma_pagamento`
+-- Data for table `al_system`.`FormaPagamento`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `al_system`;
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CARTAO_CREDITO', DEFAULT);
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CARTAO_DEBITO', DEFAULT);
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('CHEQUE', DEFAULT);
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('DINHEIRO', DEFAULT);
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('PERMUTA', DEFAULT);
-INSERT INTO `al_system`.`forma_pagamento` (`descricao`, `id`) VALUES ('PROMISSORIA', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CARTÃO DE CRÉDITO', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CARTÃO DE DÉBITO', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CHEQUE', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('DINHEIRO', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('PERMUTA', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('PROMISSÓRIA', DEFAULT);
 
 COMMIT;
 
