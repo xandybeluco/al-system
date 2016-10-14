@@ -1,0 +1,49 @@
+<html><head>
+<title>Data dictionary: al_system</title>
+<style>
+    td,th {
+      text-align:center; 
+      vertical-align:middle;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    caption, th, td {
+      padding: .2em .8em;
+      border: 1px solid #fff;
+    }
+    caption {
+      background: #dbb768;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    th {
+      font-weight: bold;
+      background: #f3ce7d;
+    }
+    td {
+      background: #ffea97;
+    }
+  </style>
+</head>
+<body>
+<table><caption>Table: Credencial - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>funcionario</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>id</td><td>SMALLINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>perfilAdministrador</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'0'</td><td></td></tr>
+<tr><td>perfilPadrao</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'1'</td><td></td></tr>
+<tr><td>senha</td><td>CHAR(128)</td><td>Yes</td><td>No</td><td>No</td><td>'93f4a4e86cf842f2a03cd2eedbcd3c72325d6833fa991b895be40204be651427652c78b9cdbdef7c01f80a0acb58f791c36d49fbaa5738970e83772cea18eba1'</td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuario</td><td>VARCHAR(16)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+</body></html>

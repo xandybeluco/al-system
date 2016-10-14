@@ -1,0 +1,283 @@
+<html><head>
+<title>Data dictionary: al_system</title>
+<style>
+    td,th {
+      text-align:center; 
+      vertical-align:middle;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    caption, th, td {
+      padding: .2em .8em;
+      border: 1px solid #fff;
+    }
+    caption {
+      background: #dbb768;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    th {
+      font-weight: bold;
+      background: #f3ce7d;
+    }
+    td {
+      background: #ffea97;
+    }
+  </style>
+</head>
+<body>
+<table><caption>Table: Uf - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>ibge</td><td>TINYINT(2)</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>nome</td><td>VARCHAR(19)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>sigla</td><td>ENUM('AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'EX', 'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO')</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Endereco - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>bairro</td><td>VARCHAR(64)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>cep</td><td>CHAR(8)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>cidade</td><td>VARCHAR(64)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>complemento</td><td>VARCHAR(64)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>complemento2</td><td>VARCHAR(64)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>ibge</td><td>MEDIUMINT(8)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>logradouro</td><td>VARCHAR(64)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>nomeContato</td><td>VARCHAR(16)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>numero</td><td>VARCHAR(8)</td><td>Yes</td><td>No</td><td>No</td><td>'s.n.º'</td><td></td></tr>
+<tr><td>pessoa</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>tipo</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>uf</td><td>TINYINT(2)</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Pessoa - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>aberturaNascimento</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>cnpjCpf</td><td>VARCHAR(14)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>fantasiaSobrenome</td><td>VARCHAR(64)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>SMALLINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>ieRg</td><td>VARCHAR(16)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>nomeRazao</td><td>VARCHAR(128)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>perfilCliente</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'0'</td><td></td></tr>
+<tr><td>perfilFornecedor</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'0'</td><td></td></tr>
+<tr><td>perfilTransportador</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'0'</td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>tipo</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Telefone - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>id</td><td>BIGINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>nomeContato</td><td>VARCHAR(16)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>numero</td><td>VARCHAR(16)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>pessoa</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>tipo</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Email - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>enderecoEletronico</td><td>VARCHAR(64)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>nomeContato</td><td>VARCHAR(16)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>pessoa</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>tipo</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Credencial - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>funcionario</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>id</td><td>SMALLINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>perfilAdministrador</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'0'</td><td></td></tr>
+<tr><td>perfilPadrao</td><td>BIT(1)</td><td>Yes</td><td>No</td><td>No</td><td>b'1'</td><td></td></tr>
+<tr><td>senha</td><td>CHAR(128)</td><td>Yes</td><td>No</td><td>No</td><td>'93f4a4e86cf842f2a03cd2eedbcd3c72325d6833fa991b895be40204be651427652c78b9cdbdef7c01f80a0acb58f791c36d49fbaa5738970e83772cea18eba1'</td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuario</td><td>VARCHAR(16)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Servico - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>descricao</td><td>VARCHAR(64)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: Ordem - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>cliente</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>condicaoPagamento</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>dataAbertura</td><td>TIMESTAMP</td><td>Yes</td><td>No</td><td>No</td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>id</td><td>BIGINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>observacao</td><td>VARCHAR(256)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>tipo</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuarioAbertura</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: ItemOrdemServico - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>dataAlteracao</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td>NULL ON UPDATE CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>dataFinalizacaoPrevista</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>BIGINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>ordem</td><td>BIGINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>servico</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuarioAlteracao</td><td>SMALLINT</td><td>No</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>valorOrcamento</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td>0</td><td></td></tr>
+<tr><td>valorServico</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: CondicaoPagamento - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>descricao</td><td>VARCHAR(32)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>formaPagamento</td><td>TINYINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>id</td><td>SMALLINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: FormaPagamento - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>descricao</td><td>VARCHAR(32)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>id</td><td>TINYINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: ContaReceber - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>dataAbertura</td><td>TIMESTAMP</td><td>Yes</td><td>No</td><td>No</td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>dataAlteracao</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td>NULL ON UPDATE CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>dataVencimento</td><td>TIMESTAMP</td><td>Yes</td><td>No</td><td>No</td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>id</td><td>BIGINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>montantePago</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td>0</td><td></td></tr>
+<tr><td>numeroParcela</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td>0</td><td></td></tr>
+<tr><td>observacao</td><td>VARCHAR(128)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>ordem</td><td>BIGINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>saldoDevedor</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuarioAbertura</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>usuarioAlteracao</td><td>SMALLINT</td><td>No</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>valor</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+<table><caption>Table: ContaPagar - </caption>
+<tr><td colspan="7">Attributes</td></tr>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Not Null</th>
+<th>PK</th>
+<th>FK</th>
+<th>Default</th>
+<th>Comment</th>
+</tr>
+<tr><td>dataAbertura</td><td>TIMESTAMP</td><td>Yes</td><td>No</td><td>No</td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>dataAlteracao</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td>NULL ON UPDATE CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>dataEmissao</td><td>TIMESTAMP</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>dataVencimento</td><td>TIMESTAMP</td><td>Yes</td><td>No</td><td>No</td><td>CURRENT_TIMESTAMP</td><td></td></tr>
+<tr><td>fatura</td><td>VARCHAR(32)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>fornecedor</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>id</td><td>BIGINT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr>
+<tr><td>mesReferente</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>montantePago</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td>0</td><td></td></tr>
+<tr><td>numeroParcela</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>No</td><td>0</td><td></td></tr>
+<tr><td>observacao</td><td>VARCHAR(128)</td><td>No</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>saldoDevedor</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>situacao</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+<tr><td>usuarioAbertura</td><td>SMALLINT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>usuarioAlteracao</td><td>SMALLINT</td><td>No</td><td>No</td><td>Yes</td><td></td><td></td></tr>
+<tr><td>valor</td><td>DECIMAL(9,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr>
+</table></br>
+</body></html>
