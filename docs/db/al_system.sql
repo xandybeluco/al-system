@@ -37,17 +37,17 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Pessoa` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Pessoa` (
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `perfilCliente` BIT(1) NOT NULL DEFAULT b'0' COMMENT 'b\'0\'=Sim\nb\'1\'=Não',
+  `perfilFornecedor` BIT(1) NOT NULL DEFAULT b'0' COMMENT 'b\'0\'=Sim\nb\'1\'=Não',
+  `perfilTransportador` BIT(1) NOT NULL DEFAULT b'0' COMMENT 'b\'0\'=Sim\nb\'1\'=Não',
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Inativo\n1=Ativo',
+  `tipo` TINYINT UNSIGNED NOT NULL COMMENT '1=Físico\n2=Jurídico',
   `aberturaNascimento` TIMESTAMP NULL,
   `cnpjCpf` VARCHAR(14) CHARACTER SET 'utf8' NOT NULL,
   `fantasiaSobrenome` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `ieRg` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
   `nomeRazao` VARCHAR(128) CHARACTER SET 'utf8' NOT NULL,
-  `perfilCliente` BIT(1) NOT NULL DEFAULT b'0',
-  `perfilFornecedor` BIT(1) NOT NULL DEFAULT b'0',
-  `perfilTransportador` BIT(1) NOT NULL DEFAULT b'0',
-  `situacao` TINYINT UNSIGNED NOT NULL,
-  `tipo` TINYINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `cnpjCpfUNIQUE` (`cnpjCpf` ASC),
   UNIQUE INDEX `ieRgUNIQUE` (`ieRg` ASC),
@@ -63,19 +63,19 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Endereco` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Endereco` (
-  `bairro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tipo` TINYINT UNSIGNED NOT NULL,
+  `uf` TINYINT(2) UNSIGNED NOT NULL,
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
+  `ibge` MEDIUMINT(8) UNSIGNED NULL,
   `cep` CHAR(8) CHARACTER SET 'utf8' NOT NULL,
+  `bairro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `cidade` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `complemento` VARCHAR(64) CHARACTER SET 'utf8' NULL,
   `complemento2` VARCHAR(64) CHARACTER SET 'utf8' NULL,
-  `ibge` MEDIUMINT(8) UNSIGNED NULL,
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `logradouro` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   `numero` VARCHAR(8) CHARACTER SET 'utf8' NOT NULL DEFAULT 's.n.º',
-  `pessoa` SMALLINT UNSIGNED NOT NULL,
-  `tipo` TINYINT UNSIGNED NOT NULL,
-  `uf` TINYINT(2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `cidadeINDEX` (`cidade` ASC),
   INDEX `logradouroINDEX` (`logradouro` ASC),
@@ -102,10 +102,10 @@ DROP TABLE IF EXISTS `al_system`.`Telefone` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Telefone` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tipo` TINYINT UNSIGNED NOT NULL,
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
   `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   `numero` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
-  `pessoa` SMALLINT UNSIGNED NOT NULL,
-  `tipo` TINYINT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `pessoaNumeroUNIQUE` (`pessoa` ASC, `numero` ASC),
   INDEX `telefonePessoaFKINDEX` (`pessoa` ASC),
@@ -124,11 +124,11 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Email` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Email` (
-  `enderecoEletronico` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `id` INT UNSIGNED NOT NULL,
-  `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
-  `pessoa` SMALLINT UNSIGNED NOT NULL,
   `tipo` TINYINT UNSIGNED NOT NULL,
+  `pessoa` SMALLINT UNSIGNED NOT NULL,
+  `enderecoEletronico` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
+  `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `pessoaEnderecoEletronicoUNIQUE` (`pessoa` ASC, `enderecoEletronico` ASC),
   INDEX `emailPessoaFKINDEX` (`pessoa` ASC),
@@ -147,12 +147,12 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Credencial` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Credencial` (
-  `funcionario` SMALLINT UNSIGNED NOT NULL,
   `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `perfilAdministrador` BIT(1) NOT NULL DEFAULT b'0',
-  `perfilPadrao` BIT(1) NOT NULL DEFAULT b'1',
+  `perfilAdministrador` BIT(1) NOT NULL DEFAULT b'0' COMMENT 'b\'0\'=Sim\nb\'1\'=Não',
+  `perfilPadrao` BIT(1) NOT NULL DEFAULT b'1' COMMENT 'b\'0\'=Sim\nb\'1\'=Não',
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Inativo\n1=Ativo',
+  `funcionario` SMALLINT UNSIGNED NOT NULL,
   `senha` CHAR(128) CHARACTER SET 'utf8' NOT NULL DEFAULT '93f4a4e86cf842f2a03cd2eedbcd3c72325d6833fa991b895be40204be651427652c78b9cdbdef7c01f80a0acb58f791c36d49fbaa5738970e83772cea18eba1',
-  `situacao` TINYINT UNSIGNED NOT NULL,
   `usuario` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `funcionarioUNIQUE` (`funcionario` ASC),
@@ -174,8 +174,8 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Servico` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Servico` (
-  `descricao` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `descricaoUNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
@@ -188,8 +188,8 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`FormaPagamento` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`FormaPagamento` (
-  `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
   `id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `descricaoUNIQUE` (`descricao` ASC))
 ENGINE = InnoDB
@@ -202,9 +202,9 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`CondicaoPagamento` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`CondicaoPagamento` (
-  `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
-  `formaPagamento` TINYINT UNSIGNED NOT NULL,
   `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `formaPagamento` TINYINT UNSIGNED NOT NULL,
+  `descricao` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `formaPagamentoDescricaoUNIQUE` (`formaPagamento` ASC, `descricao` ASC),
   INDEX `condicaoPagamentoFormaPagamentoFKINDEX` (`formaPagamento` ASC),
@@ -223,14 +223,14 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`Ordem` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Ordem` (
-  `cliente` SMALLINT UNSIGNED NOT NULL,
-  `condicaoPagamento` SMALLINT UNSIGNED NOT NULL,
-  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `observacao` VARCHAR(256) CHARACTER SET 'utf8' NULL,
   `situacao` TINYINT UNSIGNED NOT NULL,
   `tipo` TINYINT UNSIGNED NOT NULL,
+  `cliente` SMALLINT UNSIGNED NOT NULL,
+  `condicaoPagamento` SMALLINT UNSIGNED NOT NULL,
   `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
+  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `observacao` VARCHAR(256) CHARACTER SET 'utf8' NULL,
   PRIMARY KEY (`id`),
   INDEX `ordemClienteFKINDEX` (`cliente` ASC),
   INDEX `ordemCondicaoPagamentoFKINDEX` (`condicaoPagamento` ASC),
@@ -260,15 +260,15 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`ItemOrdemServico` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`ItemOrdemServico` (
-  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `dataFinalizacaoPrevista` TIMESTAMP NULL,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ordem` BIGINT UNSIGNED NOT NULL,
-  `servico` INT UNSIGNED NOT NULL,
   `situacao` TINYINT UNSIGNED NOT NULL,
   `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `servico` INT UNSIGNED NOT NULL,
+  `ordem` BIGINT UNSIGNED NOT NULL,
   `valorOrcamento` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
   `valorServico` DECIMAL(9,2) UNSIGNED NOT NULL,
+  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dataFinalizacaoPrevista` TIMESTAMP NULL,
   PRIMARY KEY (`id`),
   INDEX `itemOrdemServicoOrdemINDEX` (`ordem` ASC),
   INDEX `ItemOrdemServicoOrdemFKINDEX` (`ordem` ASC),
@@ -299,19 +299,19 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`ContaReceber` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`ContaReceber` (
-  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `dataVencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
   `numeroParcela` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
-  `ordem` BIGINT UNSIGNED NOT NULL,
-  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
   `situacao` TINYINT UNSIGNED NOT NULL,
   `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
   `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `ordem` BIGINT UNSIGNED NOT NULL,
+  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
+  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
   `valor` DECIMAL(9,2) UNSIGNED NOT NULL,
+  `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dataVencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `ordemNumeroParcelaUNIQUE` (`ordem` ASC, `numeroParcela` ASC),
   INDEX `contaReceberOrdemFKINDEX` (`ordem` ASC),
@@ -342,22 +342,22 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `al_system`.`ContaPagar` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`ContaPagar` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `mesReferente` TINYINT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL,
+  `fornecedor` SMALLINT UNSIGNED NOT NULL,
+  `numeroParcela` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
+  `usuarioAlteracao` SMALLINT UNSIGNED NULL,
+  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
+  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
+  `valor` DECIMAL(9,2) UNSIGNED NOT NULL,
   `dataAbertura` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dataAlteracao` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `dataEmissao` TIMESTAMP NULL,
   `dataVencimento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fatura` VARCHAR(32) CHARACTER SET 'utf8' NOT NULL,
-  `fornecedor` SMALLINT UNSIGNED NOT NULL,
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `mesReferente` TINYINT UNSIGNED NOT NULL,
-  `montantePago` DECIMAL(9,2) UNSIGNED NOT NULL DEFAULT 0,
-  `numeroParcela` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   `observacao` VARCHAR(128) CHARACTER SET 'utf8' NULL,
-  `saldoDevedor` DECIMAL(9,2) UNSIGNED NOT NULL,
-  `situacao` TINYINT UNSIGNED NOT NULL,
-  `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
-  `usuarioAlteracao` SMALLINT UNSIGNED NULL,
-  `valor` DECIMAL(9,2) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `faturaFornecedorNumeroParcelaUNIQUE` (`fatura` ASC, `fornecedor` ASC, `numeroParcela` ASC),
   INDEX `contaPagarFornecedorFKINDEX` (`fornecedor` ASC),
@@ -431,16 +431,36 @@ COMMIT;
 
 
 -- -----------------------------------------------------
+-- Data for table `al_system`.`Pessoa`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `al_system`;
+INSERT INTO `al_system`.`Pessoa` (`id`, `perfilCliente`, `perfilFornecedor`, `perfilTransportador`, `situacao`, `tipo`, `aberturaNascimento`, `cnpjCpf`, `fantasiaSobrenome`, `ieRg`, `nomeRazao`) VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT, 1, 0, NULL, '0', NULL, '0', 'AL System');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `al_system`.`Credencial`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `al_system`;
+INSERT INTO `al_system`.`Credencial` (`id`, `perfilAdministrador`, `perfilPadrao`, `situacao`, `funcionario`, `senha`, `usuario`) VALUES (DEFAULT, b'1', b'1', 1, 1, 'e6be9c9449e8fbbf611807446f6b7641bcc13c8395896d4766e8df0c0147825b25e75ba305d5bfdb4e8986363b2cc79b9b75f70386582dcc092f609738971b58', 'al-system');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
 -- Data for table `al_system`.`FormaPagamento`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `al_system`;
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CARTÃO DE CRÉDITO', DEFAULT);
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CARTÃO DE DÉBITO', DEFAULT);
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('CHEQUE', DEFAULT);
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('DINHEIRO', DEFAULT);
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('PERMUTA', DEFAULT);
-INSERT INTO `al_system`.`FormaPagamento` (`descricao`, `id`) VALUES ('PROMISSÓRIA', DEFAULT);
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTÃO DE CRÉDITO');
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CARTÃO DE DÉBITO');
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'CHEQUE');
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'DINHEIRO');
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PERMUTA');
+INSERT INTO `al_system`.`FormaPagamento` (`id`, `descricao`) VALUES (DEFAULT, 'PROMISSÓRIA');
 
 COMMIT;
 
