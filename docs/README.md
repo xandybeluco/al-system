@@ -23,4 +23,3 @@ The following is a sample VHOST you might want to consider for your project.
    </Directory>
 </VirtualHost>
 ```
-
