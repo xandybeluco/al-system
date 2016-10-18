@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS `al_system`.`Endereco` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Endereco` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tipo` TINYINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL COMMENT '0=Principal\n1=Entrega\n2=Pessoal\n3=Trabalho\n4=Outro',
   `uf` TINYINT(2) UNSIGNED NOT NULL,
   `pessoa` SMALLINT UNSIGNED NOT NULL,
   `ibge` MEDIUMINT(8) UNSIGNED NULL,
@@ -102,7 +102,7 @@ DROP TABLE IF EXISTS `al_system`.`Telefone` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Telefone` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tipo` TINYINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL COMMENT '0=Principal\n1=Pessoal\n2=Trabalho\n3=Outro',
   `pessoa` SMALLINT UNSIGNED NOT NULL,
   `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
   `numero` VARCHAR(16) CHARACTER SET 'utf8' NOT NULL,
@@ -125,7 +125,7 @@ DROP TABLE IF EXISTS `al_system`.`Email` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Email` (
   `id` INT UNSIGNED NOT NULL,
-  `tipo` TINYINT UNSIGNED NOT NULL,
+  `tipo` TINYINT UNSIGNED NOT NULL COMMENT '0=Principal\n1=Pessoal\n2=Trabalho\n3=NF-e\n4=Outro',
   `pessoa` SMALLINT UNSIGNED NOT NULL,
   `enderecoEletronico` VARCHAR(64) CHARACTER SET 'utf8' NOT NULL,
   `nomeContato` VARCHAR(16) CHARACTER SET 'utf8' NULL,
@@ -224,8 +224,8 @@ DROP TABLE IF EXISTS `al_system`.`Ordem` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`Ordem` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `situacao` TINYINT UNSIGNED NOT NULL,
-  `tipo` TINYINT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Aberto\n1=Finalizado\n2=Gerado\n3=Cancelado',
+  `tipo` TINYINT UNSIGNED NOT NULL COMMENT '0=Orçamento\n1=Ordem de serviço',
   `cliente` SMALLINT UNSIGNED NOT NULL,
   `condicaoPagamento` SMALLINT UNSIGNED NOT NULL,
   `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
@@ -261,7 +261,7 @@ DROP TABLE IF EXISTS `al_system`.`ItemOrdemServico` ;
 
 CREATE TABLE IF NOT EXISTS `al_system`.`ItemOrdemServico` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `situacao` TINYINT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Aberto\n1=Finalizado\n2=Cancelado',
   `usuarioAlteracao` SMALLINT UNSIGNED NULL,
   `servico` INT UNSIGNED NOT NULL,
   `ordem` BIGINT UNSIGNED NOT NULL,
@@ -301,7 +301,7 @@ DROP TABLE IF EXISTS `al_system`.`ContaReceber` ;
 CREATE TABLE IF NOT EXISTS `al_system`.`ContaReceber` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `numeroParcela` TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  `situacao` TINYINT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Aberto\n1=Amortizado\n2=Baixado\n3=Cancelado',
   `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
   `usuarioAlteracao` SMALLINT UNSIGNED NULL,
   `ordem` BIGINT UNSIGNED NOT NULL,
@@ -344,7 +344,7 @@ DROP TABLE IF EXISTS `al_system`.`ContaPagar` ;
 CREATE TABLE IF NOT EXISTS `al_system`.`ContaPagar` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `mesReferente` TINYINT UNSIGNED NOT NULL,
-  `situacao` TINYINT UNSIGNED NOT NULL,
+  `situacao` TINYINT UNSIGNED NOT NULL COMMENT '0=Aberto\n1=Amortizado\n2=Baixado\n3=Cancelado',
   `fornecedor` SMALLINT UNSIGNED NOT NULL,
   `numeroParcela` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   `usuarioAbertura` SMALLINT UNSIGNED NOT NULL,
@@ -382,12 +382,12 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SET SQL_MODE = '';
-GRANT USAGE ON *.* TO alsystem;
- DROP USER alsystem;
+GRANT USAGE ON *.* TO al-system;
+ DROP USER al-system;
 SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-CREATE USER 'alsystem' IDENTIFIED BY 'alsystem';
+CREATE USER 'al-system' IDENTIFIED BY 'al-system';
 
-GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `al_system`.* TO 'alsystem';
+GRANT SELECT, INSERT, TRIGGER, UPDATE, DELETE ON TABLE `al_system`.* TO 'al-system';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
